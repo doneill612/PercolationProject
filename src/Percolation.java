@@ -58,32 +58,26 @@ public class Percolation {
     private static void test(float prob, BufferedWriter bw) throws IOException {
 
         Lattice lattice;
+        List<Site> roots;
 
-        int testNum = 1;
+        int testNum = 0;
         int percolates = 0;
 
-        while(testNum <= 50) {
+        while(testNum < 50) {
 
             lattice = new Lattice(prob);
-            List<Site> roots = new ArrayList<>();
+            roots = new ArrayList<>();
 
             findRoots(lattice, roots);
 
-            if(!roots.isEmpty()) {
-                for(Site root : roots) {
-                    depthFirst(lattice, root);
-                }
-                int maxSize = 0;
-                for(Cluster cluster : lattice.getClusters()) {
-                    int clusterSize = cluster.getSites().size();
-                    if(clusterSize > maxSize)
-                        maxSize = clusterSize;
-                }
-            }
+            if(!roots.isEmpty()) for(Site root : roots) depthFirst(lattice, root);
+
             percolates += lattice.percolates() ? 1 : 0;
             testNum++;
         }
+
         bw.write("" + (percolates / 50.0) + "," + prob + "\n");
+
         System.out.println("RESULT: 50 lattices with " + percolates + " that percolate.");
 
     }
@@ -94,15 +88,23 @@ public class Percolation {
      * @param root
      */
     private static void depthFirst(Lattice lattice, Site root) {
+
         Stack<Site> stack = new Stack<>();
         Cluster cluster = new Cluster();
+
         stack.push(root);
         cluster.addSite(root);
+
         while(!stack.isEmpty()) {
+
             Site nextNode = stack.pop();
+
             for(Iterator<Site> iterator = nextNode.getNeighborsIterator();
-                iterator.hasNext(); ) {
+                iterator.hasNext(); )
+            {
+
                 Site neighbor = iterator.next();
+
                 if(Math.abs(neighbor.getX() - nextNode.getX()) > 1 ||
                         Math.abs(neighbor.getY() - nextNode.getY()) > 1) {
                     continue;
@@ -114,12 +116,8 @@ public class Percolation {
                 }
             }
         }
+
         lattice.addCluster(cluster);
-        for(int i = 0; i < Lattice.LATTICE_DIM; i++) {
-            for(int j = 0; j < Lattice.LATTICE_DIM; j++) {
-                Site node = lattice.getSiteAt(i, j);
-                node.setVisited(false);
-            }
-        }
+        lattice.reset();
     }
 }

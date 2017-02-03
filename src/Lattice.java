@@ -44,6 +44,15 @@ public class Lattice {
         }
     }
 
+    public void reset() {
+        for(int i = 0; i < Lattice.LATTICE_DIM; i++) {
+            for(int j = 0; j < Lattice.LATTICE_DIM; j++) {
+                Site node = getSiteAt(i, j);
+                node.setVisited(false);
+            }
+        }
+    }
+
     public float getOccupationProb() {
         return p;
     }
