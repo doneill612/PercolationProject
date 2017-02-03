@@ -80,12 +80,10 @@ public class Lattice {
                 Site root = cluster.getSites().get(0);
                 for(Site node : cluster.getSites()) {
                     if(node == root) continue;
-
-                    if(Math.abs(node.getY() - root.getY()) == LATTICE_DIM - 1
-                            || Math.abs(node.getX() - root.getX()) == LATTICE_DIM - 1) {
-                        if(root.getX() == 0 || root.getY() == 0)
-                            return true;
-                    }
+                    if(Math.abs(node.getY() - root.getY()) == LATTICE_DIM - 1 && root.getY() == 0)
+                        return true;
+                    if(Math.abs(node.getX() - root.getX()) == LATTICE_DIM - 1 && root.getX() == 0)
+                        return true;
                 }
             }
         }
