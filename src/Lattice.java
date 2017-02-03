@@ -70,8 +70,9 @@ public class Lattice {
 
     /**
      *
-     * @return  Does the cluster contain an occupied node on the top rank and bottom rank?
-                Does the cluster contain an occupied node on the left rank and right rank?
+     * @return  Is the root site at the top row or at the left rank?
+     *          Top: Does the cluster contain an occupied node on the bottom row?
+                Left: Does the cluster contain an occupied node on the right rank?
      */
     public boolean percolates() {
         if(clusters != null) {
@@ -82,7 +83,8 @@ public class Lattice {
 
                     if(Math.abs(node.getY() - root.getY()) == LATTICE_DIM - 1
                             || Math.abs(node.getX() - root.getX()) == LATTICE_DIM - 1) {
-                        return true;
+                        if(root.getX() == 0 || root.getY() == 0)
+                            return true;
                     }
                 }
             }
